@@ -1,7 +1,7 @@
 import psycopg2
 from config.connection import config
 
-def connect():
+def getDevice():
     """ Connect to the PostgreSQL database server """
     conn = None
     try:
@@ -12,43 +12,12 @@ def connect():
         # create a cursor
         cur = conn.cursor()
     
-        cur.execute("""SELECT * FROM tb_list_device WHERE setatus = %s""",('ON',))
-
-        # display the PostgreSQL database server version
-        db_version = cur.fetchone()
-        print(db_version)
-       
-	# close the communication with the PostgreSQL
-        cur.close()
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
-    finally:
-        if conn is not None:
-            conn.close()
-            print('Database connection closed.')
-
-def getDevice():
-    """ Connect to the PostgreSQL database server """
-    conn = None
-    try:
-        # read connection parameters
-        params = config()
-
-        # connect to the PostgreSQL server
-        print('Connecting to the PostgreSQL database...')
-        conn = psycopg2.connect(**params)
-		
-        # create a cursor
-        cur = conn.cursor()
+        cur.execute("""SELECT ip_address FROM tb_list_device WHERE setatus = %s""",('ON',))
+        rows = cur.fetchall()
         
-	# execute a statement
-        print('PostgreSQL database version:')
-        cur.execute('SELECT version()')
-
-        # display the PostgreSQL database server version
-        db_version = cur.fetchone()
-        print(db_version)
-       
+        for row in rows:
+            print(row[0])
+        cur.close()
 	# close the communication with the PostgreSQL
         cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
@@ -57,7 +26,9 @@ def getDevice():
         if conn is not None:
             conn.close()
             print('Database connection closed.')
+
+
 
 
 if __name__ == '__main__':
-    connect()
+    getDevice()
