@@ -5,7 +5,7 @@ def create_tables():
     commands = (
         """
         CREATE TABLE IF NOT EXISTS tb_list_device(
-            ip_address VARCHAR(100) NOT NULL PRIMARY KEY,
+            address VARCHAR(100) NOT NULL PRIMARY KEY,
             nama VARCHAR(100) NOT NULL,
             mac VARCHAR(100) NOT NULL,
             jenis VARCHAR(100) NOT NULL,
@@ -34,6 +34,8 @@ def create_tables():
     finally:
         if conn is not None:
             conn.close()
+
+
 
 if __name__ == '__main__':
     create_tables()

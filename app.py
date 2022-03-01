@@ -1,5 +1,6 @@
 import psycopg2
 from config.connection import config
+import requests
 
 def getDevice():
     """ Connect to the PostgreSQL database server """
@@ -17,17 +18,20 @@ def getDevice():
         
         for row in rows:
             print(row[0])
+            getData(row[0])
         cur.close()
-	# close the communication with the PostgreSQL
-        cur.close()
+	
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     finally:
         if conn is not None:
             conn.close()
-            print('Database connection closed.')
+           
 
-
+def getData(addres):
+    req = requests.get('http://'+addres)
+    dt = req.json()
+    print(dt['temp'])
 
 
 if __name__ == '__main__':
